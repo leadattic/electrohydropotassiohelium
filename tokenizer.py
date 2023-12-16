@@ -47,7 +47,7 @@ def main(file_name, do_output=False, output_dir=""):
         else:
             buffer += content[i]
     # TODO: add way to save "compiled" code to a file
-    print(out)
+
     return out
 
 

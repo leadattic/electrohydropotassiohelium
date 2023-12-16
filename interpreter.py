@@ -8,11 +8,14 @@ mode = 0
 
 functions = {}
 
+instruction_num = 0
+instructions = tokenizer.main("main.ehph")
+
 
 def main():
-    instructions = tokenizer.main("main.ehph")  # TODO: should take argv
-
+    # TODO: should take argv
     for i in range(len(instructions)):
+        instruction_num = i
         instruction = instructions[i]
         handle(instruction["command"], instruction["type"])
 
@@ -24,6 +27,8 @@ def handle(command, type):  # This should work like in C
         run_function(command)  # TODO: How to handle args? :(
     elif type == tokenizer.DELIMITER:
         pass
+    elif type == "ambiguous":
+        pass  # TODO add support for custom funcs, variables, etc.
     else:
         std.throw("'" + command + "' is not recognized as a command of any type")
 
