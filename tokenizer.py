@@ -4,10 +4,7 @@ start_time = time.time()
 height = 1
 ret_to_hight = 1
 tree = "[SyntaxTree"
-code = """if (1+1 == 2){
-    print(1, 123);
-    print("Hello World!");
-}"""
+code = open("main.ehph", "r").read()
 buffer = ""
 reserved = {
     "print": "Function",
@@ -22,7 +19,6 @@ reserved = {
     ")": "ArgumentCloser",
     "==": "ComparisonOperator",
     "=!": "ComparisonOperator",
-    "==": "ComparisonOperator",
 }
 mode = ""
 for i in range(len(code)):
@@ -94,10 +90,12 @@ for i in range(len(code)):
 
 print(tree)
 end_time = time.time()
-time = int(end_time) - int(start_time)
+run_time = int(end_time) - int(start_time)
 
 print(
     f"""
-Successfully parsed to 'FILEPLACEHOLD' in {time}s
+Successfully parsed to 'FILEPLACEHOLD' in {run_time}s
 """
 )
+time.sleep(1)
+input("Press enter to exit")
