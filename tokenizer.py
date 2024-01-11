@@ -1,13 +1,15 @@
 import os, time, sys, math
 
+DEBUG = False
 start_time = time.time()
 height = 1
 ret_to_hight = 1
 tree = "[SyntaxTree"
 code = open("main.ehph", "r").read()
 buffer = ""
-reserved = {
+reserved = {  # ALL LIBRARIES should be added to this, but with their
     "print": "Function",
+    "exit": "Function",
     ";": "eol",
     "if": "IfStatement",
     "+": "ArithmaticOperator",
@@ -19,12 +21,15 @@ reserved = {
     ")": "ArgumentCloser",
     "==": "ComparisonOperator",
     "=!": "ComparisonOperator",
+    "{": "CodeSectionStart",
+    "}": "CodeSectionEnd",
 }
-mode = ""
+
 for i in range(len(code)):
-    if code[i] != " ":
+    if code[i] not in ["\n", " "]:  # TODO:  Consider
         buffer += code[i]
-    print(buffer)
+    if DEBUG:
+        print(buffer)
     if buffer in reserved:
         if reserved[buffer] == "IfStatement":
             tree += "[IfStatement"
@@ -45,11 +50,13 @@ for i in range(len(code)):
                     tree += "]"
                     height = ret_to_hight
         if reserved[buffer] == "ArgumentOpener":
-            name_later = tree.split("[")[::-1][0].split(" ")[0]
+            parent_type = tree.split("[")[::-1][0].split(" ")[
+                0
+            ]  # Consider renaming parent_type
             tree += "["
-            if name_later == "IfStatement":
+            if parent_type == "IfStatement":
                 tree += "Condition"
-            elif name_later == "Function":
+            elif parent_type == "Function":
                 tree += "Arguments"
             height += 1
             ret_to_hight += 1
@@ -59,6 +66,16 @@ for i in range(len(code)):
             ret_to_hight -= 1
         if reserved[buffer] == "ComparisonOperator":
             tree += "[ComparisonOperator: " + buffer + "]"
+        if reserved[buffer] == "CodeSectionStart":
+            tree += "[Code "
+            height += 1
+            ret_to_hight += 1
+        if reserved[buffer] == "CodeSectionEnd":
+            tree += "]]"
+            height -= (
+                2  # Having these values be 2 might cause bugs in the future, beware
+            )
+            ret_to_hight -= 2
 
         buffer = ""
     try:
@@ -66,7 +83,7 @@ for i in range(len(code)):
             if code[i + 1] in [" ", ";", ","] or code[i + 1] in reserved:
                 if buffer.startswith('"'):
                     start = i - (len(buffer) - 1)
-                    print(code[start])
+
                     quotation_count = 0
                     j = 0
                     string_buffer = ""
@@ -88,14 +105,16 @@ for i in range(len(code)):
             tree += "]"
 
 
-print(tree)
+def get_tree():
+    return tree
+
+
 end_time = time.time()
 run_time = int(end_time) - int(start_time)
 
-print(
-    f"""
-Successfully parsed to 'FILEPLACEHOLD' in {run_time}s
-"""
-)
-time.sleep(1)
-input("Press enter to exit")
+
+if __name__ == "__main__":
+    print(tree)
+    time.sleep(1)
+    input("Press enter to exit")
+    print(f"Successfully parsed in {run_time}s")
