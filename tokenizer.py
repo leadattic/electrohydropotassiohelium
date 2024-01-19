@@ -1,13 +1,13 @@
 import os, time, sys, math
 
-DEBUG = False
+DEBUG = True
 start_time = time.time()
 height = 1
-ret_to_hight = 1
+ret_to_height = 1
 tree = "[SyntaxTree"
 code = open("main.ehph", "r").read()
 buffer = ""
-reserved = {  # ALL LIBRARIES should be added to this, but with their
+reserved = {  # ALL LIBRARIES should be added to this, but with their respective functions and tokens (TODO: Reconsider)
     "print": "Function",
     "exit": "Function",
     ";": "eol",
@@ -23,10 +23,11 @@ reserved = {  # ALL LIBRARIES should be added to this, but with their
     "=!": "ComparisonOperator",
     "{": "CodeSectionStart",
     "}": "CodeSectionEnd",
+    "int": "IntegerVariableDefinition"
 }
 
 for i in range(len(code)):
-    if code[i] not in ["\n", " "]:  # TODO:  Consider
+    if code[i] not in ["\n", " "]:  # TODO:  Consider having a use for \n
         buffer += code[i]
     if DEBUG:
         print(buffer)
@@ -34,21 +35,21 @@ for i in range(len(code)):
         if reserved[buffer] == "IfStatement":
             tree += "[IfStatement"
             height += 1
-            ret_to_hight += 1
+            ret_to_height += 1
         if reserved[buffer] == "Function":
             height += 1
             tree += "[Function " + buffer
         if reserved[buffer] == "eol":
-            for j in range(height - ret_to_hight):
+            for j in range(height - ret_to_height):
                 tree += "]"
-            height = ret_to_hight
+            height = ret_to_height
         if reserved[buffer] == "ArithmaticOperator":
             tree += "[ArithmaticOperator: " + buffer + "]"
         if reserved[buffer] == "ArgumentSeparator":
             if code[::-1][0] == "]":
-                for j in range(height - ret_to_hight):
+                for j in range(height - ret_to_height):
                     tree += "]"
-                    height = ret_to_hight
+                    height = ret_to_height
         if reserved[buffer] == "ArgumentOpener":
             parent_type = tree.split("[")[::-1][0].split(" ")[
                 0
@@ -59,24 +60,26 @@ for i in range(len(code)):
             elif parent_type == "Function":
                 tree += "Arguments"
             height += 1
-            ret_to_hight += 1
+            ret_to_height += 1
         if reserved[buffer] == "ArgumentCloser":
             tree += "]"
             height -= 1
-            ret_to_hight -= 1
+            ret_to_height -= 1
         if reserved[buffer] == "ComparisonOperator":
             tree += "[ComparisonOperator: " + buffer + "]"
         if reserved[buffer] == "CodeSectionStart":
             tree += "[Code "
             height += 1
-            ret_to_hight += 1
+            ret_to_height += 1
         if reserved[buffer] == "CodeSectionEnd":
             tree += "]]"
             height -= (
                 2  # Having these values be 2 might cause bugs in the future, beware
             )
-            ret_to_hight -= 2
-
+            ret_to_height -= 2
+        if reserved[buffer] == "IntegerVariableDefinition":
+            tree += "[IntegerVariableDefinition"
+            height += 1
         buffer = ""
     try:
         if 0 <= i < len(code):  # HOW IS THIS NOT FUCKING WORKING
@@ -96,12 +99,16 @@ for i in range(len(code)):
                     tree += "[StringLiteral: " + string_buffer + "]"
                 elif buffer.isdigit():
                     tree += "[IntegerLiteral: " + buffer + "]"
+                elif "IntegerVariableDefinition" == tree.split("[")[::-1][0].split(" ")[0] and buffer not in ["", " "]:
+                    print("DEBUG " + buffer)
+                    tree += " " + buffer + " [Value "
+                    height += 1
                 buffer = ""
     except IndexError as e:
         print("Out of index, handled")
 
     if len(code) == i:
-        for j in range(ret_to_hight - 1):
+        for j in range(ret_to_height - 1):
             tree += "]"
 
 

@@ -1,3 +1,4 @@
+int i 123;
 if (1+1 == 2){
     print(1, 123);
     print("Hello World!");
