@@ -1,3 +1,4 @@
+> **_Disclaimer:_**  All features mentioned are not implemented yet
 # ⚡ - ElectroHydroPotassioHelium
 A lightning fast C-style python based compiled language.
 ## 🔥- Blazingly fast runtime
@@ -11,3 +12,5 @@ ElectroHydroPotassioHelium features a well-versed interpreter for lightweight us
 ElectroHydroPotassioHelium is intended to be very easy to use for beginners, therefore it uses a lot of the same function and keyword terminology as python and C.
 ### 😕 - The importance of ease
 We're quite sure almost all of us can remember being a beginner developer, overwhelmed by all the new terminology and logic. The ElectroHydroPotassioHelium dev team wants to make sure those who are just starting out can get started quickly, and have a welcoming community to come to. That is why ElectroHydroPotassioHelium is as easy-to-learn as possible. 
+## 😁 - The rich landscape of libraries
+Even though our community is not very big, we still have extensive support for libraries, and even though 
