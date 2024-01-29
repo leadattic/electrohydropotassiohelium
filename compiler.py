@@ -1,5 +1,8 @@
 import os, tokenizer, sys
 
-assembly = ""
+c_code = ""
+c_functions = ""
 code = tokenizer.get_tree()
 print(code)
+
+for i in range(len(code))
