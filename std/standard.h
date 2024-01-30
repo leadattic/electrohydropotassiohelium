@@ -24,3 +24,14 @@ int no_access_arr_length(char arr[])
     }
     return count;
 }
+
+int no_access_arr_length(int arr[])
+{
+    int i;
+    int count = 0;
+    for(i=0; arr[i]!='\0'; i++)
+    {
+        count++;
+    }
+    return count;
+}
