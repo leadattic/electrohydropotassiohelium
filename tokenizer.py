@@ -53,7 +53,7 @@ for i in range(len(code)):
         if reserved[buffer] == "ArgumentOpener":
             parent_type = tree.split("[")[::-1][0].split(" ")[
                 0
-            ]  # Consider renaming parent_type
+            ]  # Consider renaming variable parent_type
             tree += "["
             if parent_type == "IfStatement":
                 tree += "Condition"
